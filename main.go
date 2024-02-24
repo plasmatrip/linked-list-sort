@@ -6,6 +6,7 @@ import (
 
 type LinkedList struct {
 	head *Node
+	len  int
 }
 
 type Node struct {
@@ -15,6 +16,7 @@ type Node struct {
 
 func (l *LinkedList) addFirst(value int) {
 	l.head = &Node{value: value, next: l.head}
+	l.len++
 }
 
 func (l *LinkedList) addLast(value int) {
@@ -23,6 +25,7 @@ func (l *LinkedList) addLast(value int) {
 		node = node.next
 	}
 	node.next = &Node{value: value, next: nil}
+	l.len++
 }
 
 func (l *LinkedList) delValue(value int) {
@@ -39,6 +42,7 @@ func (l *LinkedList) delValue(value int) {
 			case l.previus(i) == nil && l.next(i) == nil:
 				l.head = nil
 			}
+			l.len--
 			return
 		}
 		node = node.next
@@ -59,6 +63,7 @@ func (l *LinkedList) delIndex(index int) {
 			case l.previus(i) == nil && l.next(i) == nil:
 				l.head = nil
 			}
+			l.len--
 			return
 		}
 		node = node.next
@@ -120,15 +125,6 @@ func (l *LinkedList) next(index int) *Node {
 	return nil
 }
 
-func (l *LinkedList) len() int {
-	node := l.head
-	len := 0
-	for ; node != nil; len++ {
-		node = node.next
-	}
-	return len
-}
-
 func (l *LinkedList) insert(index, value int) {
 	node := l.head
 	for i := 0; node != nil; i++ {
@@ -140,6 +136,7 @@ func (l *LinkedList) insert(index, value int) {
 			if l.previus(i) != nil {
 				l.previus(i).next = node
 			}
+			l.len++
 			return
 		}
 		node = node.next
@@ -179,8 +176,12 @@ func (l *LinkedList) printList() {
 	fmt.Println("--------")
 }
 
+func (l *LinkedList) String() string {
+	return fmt.Sprintf("Linked list of %d elements", l.len)
+}
+
 func (l *LinkedList) sort() {
-	quickSortByCenter(l, 0, l.len()-1)
+	quickSortByCenter(l, 0, l.len-1)
 }
 
 func quickSortByCenter(l *LinkedList, start, end int) {
@@ -209,9 +210,9 @@ func quickSortByCenter(l *LinkedList, start, end int) {
 }
 
 func main() {
-	fmt.Println("The linked list is initialized with 1 element with the value 5")
-	list := LinkedList{head: &Node{value: 5, next: nil}}
-	fmt.Printf("Lenght of list: %d\n", list.len())
+	fmt.Println("The linked list is initialized")
+	list := LinkedList{nil, 0}
+	fmt.Printf("Lenght of list: %d\n", list.len)
 	list.printList()
 
 	fmt.Println("Insert an element at the beginning of a linked list: 3, 2, 8")
@@ -242,7 +243,7 @@ func main() {
 	list.insert(1, 9)
 	list.printList()
 
-	fmt.Printf("Lenght of list: %d\n", list.len())
+	fmt.Printf("Lenght of list: %d\n", list.len)
 	fmt.Println("--------")
 
 	fmt.Println("Delete element with value of 5")
@@ -268,15 +269,19 @@ func main() {
 	fmt.Println("Delete element at index 2 - last element")
 	list.delIndex(2)
 	list.printList()
+	list.delIndex(1)
+	list.printList()
 
 	fmt.Println("new elements added")
-	list.insert(1, 6)
-	list.insert(1, 1)
-	list.insert(2, 3)
-	list.insert(0, 9)
+	list.insert(0, 6)
+	list.addLast(3)
+	list.addLast(5)
+	list.addLast(9)
 	list.printList()
 
 	fmt.Println("Sorted linked list")
 	list.sort()
 	list.printList()
+
+	fmt.Println(list.String())
 }
