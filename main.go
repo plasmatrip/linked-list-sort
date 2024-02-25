@@ -32,14 +32,15 @@ func (l *LinkedList) delValue(value int) {
 	node := l.head
 	for i := 0; node != nil; i++ {
 		if node.value == value {
+			previus := l.previus(i)
 			switch {
-			case l.previus(i) != nil && l.next(i) != nil:
-				l.previus(i).next = l.next(i)
-			case l.previus(i) == nil && l.next(i) != nil:
-				l.head = l.next(i)
-			case l.previus(i) != nil && l.next(i) == nil:
-				l.previus(i).next = nil
-			case l.previus(i) == nil && l.next(i) == nil:
+			case previus != nil && node.next != nil:
+				previus.next = node.next
+			case previus == nil && node.next != nil:
+				l.head = node.next
+			case previus != nil && node.next == nil:
+				previus.next = nil
+			case previus == nil && node.next == nil:
 				l.head = nil
 			}
 			l.len--
@@ -53,14 +54,15 @@ func (l *LinkedList) delIndex(index int) {
 	node := l.head
 	for i := 0; node != nil; i++ {
 		if i == index {
+			previus := l.previus(i)
 			switch {
-			case l.previus(i) != nil && l.next(i) != nil:
-				l.previus(i).next = l.next(i)
-			case l.previus(i) == nil && l.next(i) != nil:
-				l.head = l.next(i)
-			case l.previus(i) != nil && l.next(i) == nil:
-				l.previus(i).next = nil
-			case l.previus(i) == nil && l.next(i) == nil:
+			case previus != nil && node.next != nil:
+				previus.next = node.next
+			case previus == nil && node.next != nil:
+				l.head = node.next
+			case previus != nil && node.next == nil:
+				previus.next = nil
+			case previus == nil && node.next == nil:
 				l.head = nil
 			}
 			l.len--
